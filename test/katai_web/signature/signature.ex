@@ -19,7 +19,7 @@ defmodule Katai.SignatureTest do
 
     msg =
       %{
-        "message" => "letter"
+        "message" => "valid letter"
       }
       |> Jason.encode!()
 
@@ -40,7 +40,7 @@ defmodule Katai.SignatureTest do
 
     msg =
       %{
-        "message" => "letter"
+        "message" => "invalid letter"
       }
       |> Jason.encode!()
 
@@ -108,7 +108,7 @@ defmodule Katai.SignatureTest do
   def create_signature do
     private_key = ExPublicKey.loads!(private_key())
 
-    msg = %{"name_first" => "Saul", "name_last" => "Perez"}
+    msg = %{"message" => "hola"}
     msg_serialized = "#{Poison.encode!(msg)}"
     {:ok, signature} = ExPublicKey.sign(msg_serialized, private_key)
     Base.encode64(signature)
@@ -117,7 +117,7 @@ defmodule Katai.SignatureTest do
   @spec create_hash() :: {:ok, String.t()}
   def create_hash() do
     msg = %{
-      "card" => "9900006512347508"
+      "message" => "letter valid"
     }
 
     ts = generate_time_stamp(DateTime.utc_now())
