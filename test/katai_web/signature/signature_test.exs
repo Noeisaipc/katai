@@ -1,6 +1,5 @@
-defmodule Katai.SignatureTest do
+defmodule KataiWeb.SignatureTest do
   use KataiWeb.ConnCase, async: true
-  use Plug.Test
 
   test "validate_signature" do
     public_key = ExPublicKey.loads!(public_key())
@@ -117,11 +116,11 @@ defmodule Katai.SignatureTest do
   @spec create_hash() :: {:ok, String.t()}
   def create_hash() do
     msg = %{
-      "message" => "letter valid"
+      "message" => "valid letter"
     }
 
     ts = generate_time_stamp(DateTime.utc_now())
-    msg = "#{ts}localhost/card_holders/cards/validate_body#{Poison.encode!(msg)}"
+    msg = "#{ts}localhost/test_sign#{Poison.encode!(msg)}"
     hash = :crypto.hash(:sha256, msg) |> Base.encode64()
     {:ok, hash, ts}
   end
