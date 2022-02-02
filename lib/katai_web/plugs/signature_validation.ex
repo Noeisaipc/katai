@@ -4,16 +4,16 @@ defmodule KataiWeb.Plug.SignatureValidation do
   """
   import Plug.Conn
   require Logger
-  alias PrimeTime.CardHolders
+  alias Katai.Accounts
 
   @spec init(any()) :: any()
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    card_holder_id = conn.private.guardian_default_claims["sub"]
+    user = conn.private.guardian_default_claims["sub"]
 
-    with {:ok, card_holder} <- CardHolders.get_card_holder_by_id(card_holder_id),
-         {:ok, public_key} <- fetch_public_key_from_user(card_holder),
+    with {:ok, user} <- Accounts.get_user!(user),
+         {:ok, public_key} <- fetch_public_key_from_user(user),
          {:ok, "valid"} <-
            validate_hash_from_conn(
              conn.assigns[:time_stamp],
