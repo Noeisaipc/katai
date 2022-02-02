@@ -45,7 +45,7 @@ defmodule Katai.SignatureTest do
       |> Jason.encode!()
 
     {:error, error} =
-      PrimeTimeWeb.Plug.SignatureValidation.validate_hash_from_conn(
+      KataiWeb.Plug.SignatureValidation.validate_hash_from_conn(
         ts,
         "localhost",
         "/test_sign",
