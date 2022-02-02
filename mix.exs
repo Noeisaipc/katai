@@ -20,7 +20,7 @@ defmodule Katai.MixProject do
   def application do
     [
       mod: {Katai.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:guardian, :logger, :runtime_tools]
     ]
   end
 
@@ -44,7 +44,9 @@ defmodule Katai.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:guardian, "~> 2.0"},
+      {:ex_crypto, "~> 0.10.0"}
     ]
   end
 

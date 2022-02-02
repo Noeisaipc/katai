@@ -26,6 +26,9 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :katai, KataiWeb.Guardian,
+       issuer: "katai",
+       secret_key: "Zn4WTour4LiNL8SG7GFvRPfhATLkXLfbmuyIzQBotzOZ48vx2vF6cciIDtJJOHHg"
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

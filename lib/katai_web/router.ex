@@ -9,20 +9,43 @@ defmodule KataiWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :api_auth do
+    plug(Guardian.Plug.Pipeline,
+      module: KataiWeb.Guardian,
+      error_handler: KataiWeb.JsonAuthErrorHandler
+    )
+
+    plug Guardian.Plug.VerifyHeader
+    plug Guardian.Plug.EnsureAuthenticated
+  end
+
+  pipeline :signature_validation do
+    plug KataiWeb.Plug.HeadersValidation
+    plug KataiWeb.Plug.SignatureValidation
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", KataiWeb do
-    pipe_through :browser
+  # scope "/", KataiWeb do
+  #   pipe_through :browser
 
-    get "/", PageController, :index
-  end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", KataiWeb do
-  #   pipe_through :api
+  #   get "/", PageController, :index
   # end
+
+  #Other scopes may use custom stacks.
+  scope "/api/v1", KataiWeb do
+    pipe_through :api
+
+    post "/sign_in", MobileSessionController, :sign_in
+    resources "/users", UserController, except: [:new, :edit]
+
+    pipe_through(:api_auth)
+    pipe_through(:signature_validation)
+    post "/test_sign", MobileSessionController, :test_sign
+    post "/sign_out", MobileSessionController, :sing_out
+  end
 
   # Enables LiveDashboard only for development
   #
